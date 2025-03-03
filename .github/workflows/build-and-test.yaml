@@ -5,6 +5,21 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      envioronment:
+        description: "Select an envioronment"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      version:
+        description: "Select a deploy version"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -23,6 +38,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Deploy application
+        run: |
+          echo "選択された環境: ${{github.event.inputs.environment}}"
+          echo "指定されたバージョン: ${{github.event.inputs.version}}"
 
       - name: Run tests
         run: npm test
